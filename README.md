@@ -9,7 +9,6 @@ CircleCI 2.0 build image for jbuilder-based OCaml projects
 version: 2
 jobs:
   build:
-    working_directory: /retyped
     docker:
       - image: rrdelaney/circleci2-jbuilder
     steps:
@@ -20,8 +19,6 @@ jobs:
       - run:
           name: 'Build JS files'
           command: 'eval $(opam config env) && make js'
-          environment:
-            TERM: xterm
       - run:
           name: 'Install JS dependencies'
           command: 'npm install'
