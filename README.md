@@ -11,14 +11,23 @@ jobs:
   build:
     docker:
       - image: rrdelaney/circleci2-jbuilder
+        environment:
+          TERM: xterm
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - opam-deps-{{ checksum "MyProject.opam" }}
       - run:
-          name: 'Clean build artifacts'
-          command: 'make clean'
+          name: 'Install OCaml dependencies'
+          command: 'eval $(opam config env) && opam install -y <my-dependencies>'
+      - save_cache:
+          key: opam-deps-{{ checksum "MyProject.opam" }}
+          paths:
+            - ~/.opam
       - run:
           name: 'Build JS files'
-          command: 'eval $(opam config env) && make js'
+          command: 'eval $(opam config env) && jbuilder build src/cli.exe'
       - run:
           name: 'Install JS dependencies'
           command: 'npm install'
