@@ -1,6 +1,5 @@
 FROM circleci/node
 
-RUN sudo apt-get install opam
-RUN opam init -y && opam update
+RUN wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh -O - | sh -s /usr/local/bin
 RUN opam switch 4.02.3
-RUN eval $(opam config env) && opam install -y jbuilder
+RUN eval $(opam config env) && opam update && opam install -y jbuilder
